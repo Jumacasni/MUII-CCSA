@@ -10,4 +10,4 @@ RUN pip install --requirement requirements.txt
 
 EXPOSE 8000
 
-CMD python api_v1.py
+CMD gunicorn -w 4 -b 0.0.0.0:8000 api_v1:app
