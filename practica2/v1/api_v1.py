@@ -36,11 +36,11 @@ def daterange(n_hours):
 
 def to_json(periods, temp, hum):
 	date_list = daterange(periods)
-	data_dict = {}
+	data_dict = dict()
 
 	for index, date in enumerate(date_list):
 		data_dict[date] = {"temperature": temp[0][index],"humidity": hum[0][index]}
-		
+	
 	return json.dumps(data_dict, indent=4)
 
 
@@ -56,7 +56,9 @@ def obtener_prediccion(horas):
 		
 		pred = get_prediction(int(hora))
 
-		return Response(pred, status=200)
+		return Response(response=pred,
+										status=200,
+										mimetype='application/json')
 
 	return Response("Error en la consulta", status=400)
 
