@@ -6,7 +6,7 @@ WORKDIR api_v1
 
 COPY . /api_v1/
 
-RUN pip install --upgrade pip && pip install --requirement requirements.txt
+RUN pip install --requirement requirements.txt
 
 EXPOSE 8000
 

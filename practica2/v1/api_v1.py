@@ -1,12 +1,15 @@
 from flask import Flask, Response
+from datetime import datetime, timedelta
+import pmdarima as pm
 import pickle
+import json
 
 app = Flask(__name__)
 
-with open('/tmp/v1/model_temperature.pkl', 'rb') as file_temperature:
+with open('model_temperature.pkl', 'rb') as file_temperature:
 	model_temperature = pickle.load(file_temperature)
 
-with open('/tmp/v1/model_humidity.pkl', 'rb') as file_humidity:
+with open('model_humidity.pkl', 'rb') as file_humidity:
 	model_humidity = pickle.load(file_humidity)
 
 def get_prediction(periods):
@@ -14,7 +17,7 @@ def get_prediction(periods):
 
 	fc_humidity = model_humidity.predict(n_periods=periods, return_conf_int=True)
 
-	return to_json(fc_temperature, fc_humidity)
+	return to_json(periods, fc_temperature, fc_humidity)
 
 
 def daterange(n_hours):
@@ -31,8 +34,8 @@ def daterange(n_hours):
 	return date_list
 
 
-def to_json(temp, hum):
-	date_list = daterange(24)
+def to_json(periods, temp, hum):
+	date_list = daterange(periods)
 	data_dict = {}
 
 	for index, date in enumerate(date_list):
