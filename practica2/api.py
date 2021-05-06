@@ -72,7 +72,7 @@ def obtener_prediccion_v1(horas):
 	if horas == "24horas" or horas == "48horas" or horas == "72horas":
 		hora = horas[:2]
 		
-		pred = get_prediction(int(hora))
+		pred = get_prediction_v1(int(hora))
 
 		return Response(response=pred,
 										status=200,
@@ -86,7 +86,7 @@ def obtener_prediccion_v2(horas):
 	if horas == "24horas" or horas == "48horas" or horas == "72horas":
 		hora = horas[:2]
 		
-		pred = get_prediction(int(hora))
+		pred = get_prediction_v2(int(hora))
 
 		return Response(response=pred,
 										status=200,
