@@ -30,11 +30,11 @@ def get_prediction_v1(periods):
 def get_prediction_v2(periods):
 	future_temperature = model_temperature_v2.make_future_dataframe(periods=periods, freq="h")
 	prophet_pred_temperature = model_temperature_v2.predict(future_temperature)
-	prophet_pred_temperature = [prophet_pred_temperature[-24:]["yhat"].array,prophet_pred_temperature[-24:]['ds'].array]
+	prophet_pred_temperature = [prophet_pred_temperature[-periods:]["yhat"].array,prophet_pred_temperature[-periods:]['ds'].array]
 
 	future_humidity = model_humidity_v2.make_future_dataframe(periods=periods, freq="h")
 	prophet_pred_humidity = model_humidity_v2.predict(future_humidity)
-	prophet_pred_humidity = [prophet_pred_humidity[-24:]["yhat"].array,prophet_pred_humidity[-24:]['ds'].array]
+	prophet_pred_humidity = [prophet_pred_humidity[-periods:]["yhat"].array,prophet_pred_humidity[-periods:]['ds'].array]
 	
 	return to_json(periods, prophet_pred_temperature, prophet_pred_humidity)
 
