@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from fbprophet import Prophet
 import pmdarima as pm
 import pickle
-import json
 
 app = Flask(__name__)
 
@@ -54,12 +53,15 @@ def daterange(n_hours):
 
 def to_json(periods, temp, hum):
 	date_list = daterange(periods)
-	data_dict = dict()
 
+	res = "{\n"
 	for index, date in enumerate(date_list):
-		data_dict[date] = {"temperature": temp[0][index],"humidity": hum[0][index]}
-	
-	return json.dumps(data_dict, indent=4)
+		res += '{"hour":'+date+',"temp":'+str(temp[0][index])+',"hum":'+str(hum[0][index])+'}'
+		
+		if index != (len(date_list)-1):
+			res += ",\n"
+
+	return res
 
 
 @app.route("/")
