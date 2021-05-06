@@ -29,5 +29,25 @@ class TestAPIV1(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.content_type, "application/json")
 
+	def test_bad_request_v2(self):
+		response = app.get('servicio/v2/prediccion/error')
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(response.data.decode('UTF-8'), "Error en la consulta")
+
+	def test_good_request_24horas_v2(self):
+		response = app.get('servicio/v2/prediccion/24horas')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.content_type, "application/json")
+
+	def test_good_request_48horas_v2(self):
+		response = app.get('servicio/v2/prediccion/48horas')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.content_type, "application/json")
+
+	def test_good_request_72horas_v2(self):
+		response = app.get('servicio/v2/prediccion/72horas')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.content_type, "application/json")
+
 if __name__ == "__main__":
 	unittest.main() 
