@@ -68,7 +68,7 @@ def index():
 
 
 @app.route("/servicio/v1/prediccion/<string:horas>", methods=['GET'])
-def obtener_prediccion(horas):
+def obtener_prediccion_v1(horas):
 	if horas == "24horas" or horas == "48horas" or horas == "72horas":
 		hora = horas[:2]
 		
@@ -82,7 +82,7 @@ def obtener_prediccion(horas):
 
 
 @app.route("/servicio/v2/prediccion/<string:horas>", methods=['GET'])
-def obtener_prediccion(horas):
+def obtener_prediccion_v2(horas):
 	if horas == "24horas" or horas == "48horas" or horas == "72horas":
 		hora = horas[:2]
 		
