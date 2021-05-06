@@ -1,3 +1,4 @@
 Flask
+Prophet
 pmdarima
 gunicorn
