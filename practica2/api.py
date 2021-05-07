@@ -6,19 +6,26 @@ import pickle
 
 app = Flask(__name__)
 
+# Cargar modelo de predicción de temperatura de ARIMA
 with open('v1/model_temperature.pkl', 'rb') as file_temperature:
 	model_temperature_v1 = pickle.load(file_temperature)
 
+# Cargar modelo de predicción de humedad de ARIMA
 with open('v1/model_humidity.pkl', 'rb') as file_humidity:
 	model_humidity_v1 = pickle.load(file_humidity)
 
+# Cargar modelo de predicción de temperatura de Prophet
 with open('v2/model_temperature.pkl', 'rb') as file_temperature:
 	model_temperature_v2 = pickle.load(file_temperature)
 
+# Cargar modelo de predicción de humedad de Prophet
 with open('v2/model_humidity.pkl', 'rb') as file_humidity:
 	model_humidity_v2 = pickle.load(file_humidity)
 
+
 def get_prediction_v1(periods):
+	""" Predecir temperatura y humedad con ARIMA y devolver resultados en formato JSON """
+
 	fc_temperature = model_temperature_v1.predict(n_periods=periods, return_conf_int=True)
 
 	fc_humidity = model_humidity_v1.predict(n_periods=periods, return_conf_int=True)
@@ -27,6 +34,8 @@ def get_prediction_v1(periods):
 
 
 def get_prediction_v2(periods):
+	""" Predecir temperatura y humedad con Prophet y devolver resultados en formato JSON """
+
 	future_temperature = model_temperature_v2.make_future_dataframe(periods=periods, freq="h")
 	prophet_pred_temperature = model_temperature_v2.predict(future_temperature)
 	prophet_pred_temperature = [prophet_pred_temperature[-periods:]["yhat"].array,prophet_pred_temperature[-periods:]['ds'].array]
@@ -38,6 +47,8 @@ def get_prediction_v2(periods):
 	return to_json(periods, prophet_pred_temperature, prophet_pred_humidity)
 
 def daterange(n_hours):
+	""" Genera el rango de horas de las próximas n_hours a partir de la hora actual"""
+
 	start = datetime.today().replace(minute=0, second=0, microsecond=0)
 
 	delta = timedelta(hours=1)
@@ -52,6 +63,8 @@ def daterange(n_hours):
 
 
 def to_json(periods, temp, hum):
+	""" Convertir los resultados a formato JSON siguiendo la estructura indicada en el guión de prácticas """
+
 	date_list = daterange(periods)
 
 	res = "{\n"
