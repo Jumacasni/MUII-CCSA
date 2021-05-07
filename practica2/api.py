@@ -77,8 +77,8 @@ def obtener_prediccion_v1(horas):
 		pred = get_prediction_v1(int(hora))
 
 		return Response(response=pred,
-										status=200,
-										mimetype='application/json')
+				status=200,
+				mimetype='application/json')
 
 	return Response("Error en la consulta", status=400)
 
@@ -91,7 +91,7 @@ def obtener_prediccion_v2(horas):
 		pred = get_prediction_v2(int(hora))
 
 		return Response(response=pred,
-										status=200,
-										mimetype='application/json')
+				status=200,
+				mimetype='application/json')
 
 	return Response("Error en la consulta", status=400)
