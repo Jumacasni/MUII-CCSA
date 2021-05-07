@@ -18,6 +18,10 @@ import json
 ###################
 
 def capture_data():
+	""" Descomprimir los datos y obtener sólo las columnas DATE y SAN FRANCISCO
+			Unificar los datos en un mismo archivo forecast.csv con la estructura DATE;TEMP;HUM
+	"""
+
 	with ZipFile('/tmp/humidity.csv.zip', 'r') as file:
 		file.extractall('/tmp/')
 
@@ -33,12 +37,15 @@ def capture_data():
 	data = [df_humidity['datetime'], df_temperature['San Francisco'], df_humidity['San Francisco']]
 	headers = ['DATE', 'TEMP', 'HUM']
 
+	# Unir datos y eliminar las filas que contengan NaN
 	df = pd.concat(data, axis=1, keys=headers).dropna()
 
 	df.to_csv("/tmp/forecast.csv")
 
 
 def store_data():
+	""" Almacenar los datos en MongoDB """
+
 	df = pd.read_csv('/tmp/forecast.csv')
 
 	client = MongoClient('0.0.0.0', port=27017)
@@ -51,6 +58,11 @@ def store_data():
 
 
 def models_arima():
+	""" Creación del modelo de predicción con ARIMA para la humedad y temperatura
+			Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
+			Versión 1 de la API
+	""" 
+
 	client = MongoClient('0.0.0.0', port=27017)
 	db = client["forecast"]
 	collection = db["sanfrancisco"]
@@ -99,6 +111,11 @@ def models_arima():
 		pickle.dump(model_humidity, file)
 
 def models_prophet():
+	""" Creación del modelo de predicción con Prophet para la humedad y temperatura
+			Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
+			Versión 2 de la API
+	""" 
+
 	client = MongoClient('0.0.0.0', port=27017)
 	db = client["forecast"]
 	collection = db["sanfrancisco"]
