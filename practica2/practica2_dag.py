@@ -19,7 +19,7 @@ import json
 
 def capture_data():
 	""" Descomprimir los datos y obtener sólo las columnas DATE y SAN FRANCISCO
-			Unificar los datos en un mismo archivo forecast.csv con la estructura DATE;TEMP;HUM
+	    Unificar los datos en un mismo archivo forecast.csv con la estructura DATE;TEMP;HUM
 	"""
 
 	with ZipFile('/tmp/humidity.csv.zip', 'r') as file:
@@ -29,10 +29,10 @@ def capture_data():
 		file.extractall('/tmp/')
 
 	df_humidity = pd.read_csv('/tmp/humidity.csv',
-									usecols=['datetime','San Francisco'])
+				    usecols=['datetime','San Francisco'])
 
 	df_temperature = pd.read_csv('/tmp/temperature.csv',
-										usecols=['San Francisco'])
+				    usecols=['San Francisco'])
 
 	data = [df_humidity['datetime'], df_temperature['San Francisco'], df_humidity['San Francisco']]
 	headers = ['DATE', 'TEMP', 'HUM']
@@ -59,8 +59,8 @@ def store_data():
 
 def models_arima():
 	""" Creación del modelo de predicción con ARIMA para la humedad y temperatura
-			Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
-			Versión 1 de la API
+	    Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
+	    Versión 1 de la API
 	""" 
 
 	client = MongoClient('0.0.0.0', port=27017)
@@ -70,30 +70,30 @@ def models_arima():
 	df_temperature = pd.DataFrame(list(collection.find()))['TEMP']
 
 	model_temperature = pm.auto_arima(df_temperature, start_p=1, start_q=1,
-											test='adf',       # use adftest to find optimal 'd'
-											max_p=3, max_q=3, # maximum p and q
-											m=1,              # frequency of series
-											d=None,           # let model determine 'd'
-											seasonal=False,   # No Seasonality
-											start_P=0, 
-											D=0, 
-											trace=True,
-											error_action='ignore',  
-											suppress_warnings=True, 
-											stepwise=True)
+					  test='adf',       # use adftest to find optimal 'd'
+					  max_p=3, max_q=3, # maximum p and q
+					  m=1,              # frequency of series
+					  d=None,           # let model determine 'd'
+					  seasonal=False,   # No Seasonality
+					  start_P=0, 
+					  D=0, 
+					  trace=True,
+					  error_action='ignore',  
+					  suppress_warnings=True, 
+					  stepwise=True)
 
 	model_humidity = pm.auto_arima(df_humidity, start_p=1, start_q=1,
-											test='adf',       # use adftest to find optimal 'd'
-											max_p=3, max_q=3, # maximum p and q
-											m=1,              # frequency of series
-											d=None,           # let model determine 'd'
-											seasonal=False,   # No Seasonality
-											start_P=0, 
-											D=0, 
-											trace=True,
-											error_action='ignore',  
-											suppress_warnings=True, 
-											stepwise=True)
+				       test='adf',       # use adftest to find optimal 'd'
+				       max_p=3, max_q=3, # maximum p and q
+				       m=1,              # frequency of series
+				       d=None,           # let model determine 'd'
+				       seasonal=False,   # No Seasonality
+				       start_P=0, 
+				       D=0, 
+				       trace=True,
+				       error_action='ignore',  
+				       suppress_warnings=True, 
+				       stepwise=True)
 
 	if not os.path.exists('/tmp/practica2'):
 		os.mkdir('/tmp/practica2')
@@ -112,8 +112,8 @@ def models_arima():
 
 def models_prophet():
 	""" Creación del modelo de predicción con Prophet para la humedad y temperatura
-			Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
-			Versión 2 de la API
+	    Se guarda el modelo en un archivo .pkl para su posterior uso en la predicción
+	    Versión 2 de la API
 	""" 
 
 	client = MongoClient('0.0.0.0', port=27017)
