@@ -155,6 +155,7 @@ def models_prophet():
 ############
 # INIT DAG #
 ############
+
 default_args = {
 	'owner': 'Juan Manuel Castillo Nievas',
 	'depends_on_past': False,
