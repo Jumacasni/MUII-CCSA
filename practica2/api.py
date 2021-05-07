@@ -74,6 +74,8 @@ def to_json(periods, temp, hum):
 		if index != (len(date_list)-1):
 			res += ",\n"
 
+	res += "}"
+	
 	return res
 
 
