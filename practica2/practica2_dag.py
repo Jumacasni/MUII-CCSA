@@ -57,7 +57,7 @@ def models_arima():
 	df_humidity = pd.DataFrame(list(collection.find()))['HUM']
 	df_temperature = pd.DataFrame(list(collection.find()))['TEMP']
 
-	model_temperature = pm.auto_arima(df_temperature.sample(1000), start_p=1, start_q=1,
+	model_temperature = pm.auto_arima(df_temperature, start_p=1, start_q=1,
 											test='adf',       # use adftest to find optimal 'd'
 											max_p=3, max_q=3, # maximum p and q
 											m=1,              # frequency of series
@@ -70,7 +70,7 @@ def models_arima():
 											suppress_warnings=True, 
 											stepwise=True)
 
-	model_humidity = pm.auto_arima(df_humidity.sample(1000), start_p=1, start_q=1,
+	model_humidity = pm.auto_arima(df_humidity, start_p=1, start_q=1,
 											test='adf',       # use adftest to find optimal 'd'
 											max_p=3, max_q=3, # maximum p and q
 											m=1,              # frequency of series
@@ -106,14 +106,14 @@ def models_prophet():
 	df_humidity = pd.DataFrame(list(collection.find()))['HUM']
 	df_temperature = pd.DataFrame(list(collection.find()))['TEMP']
 
-	data_temperature = [df_date.head(100), df_temperature.head(100)]
+	data_temperature = [df_date, df_temperature]
 	headers_temperature = ['ds', 'y']
 	df_temperature = pd.concat(data_temperature, axis=1, keys=headers_temperature)
 
 	model_temperature = Prophet()
 	model_temperature.fit(df_temperature)
 
-	data_humidity = [df_date.head(100), df_humidity.head(100)]
+	data_humidity = [df_date, df_humidity]
 	headers_humidity = ['ds', 'y']
 	df_humidity = pd.concat(data_humidity, axis=1, keys=headers_humidity)
 
